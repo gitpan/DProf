@@ -109,10 +109,8 @@ sub DB {
 
 require DynaLoader;
 @Devel::DProf::ISA = 'DynaLoader';
-$Devel::DProf::VERSION = '19970606'; # this version not authorized by
-					# Dean Roehrich. Patch from
-					# Gurusamy Sarathy applied while
-					# Dean was not available for comments.
+$Devel::DProf::VERSION = '19970614'; # this version not authorized by
+				     # Dean Roehrich. See "Changes" file.
 
 bootstrap Devel::DProf $Devel::DProf::VERSION;
 

@@ -6,17 +6,13 @@ The dprofpp tool is included in this package.
 
 For more information consult the pod in DProf.pm.
 
-Dean Roehrich
+Compatibility Notes (by Gurusamy Sarathy and Andreas König):
+------------------------------------------------------------
 
+DProf-19970614 will only work with 5.004 and above.  DProf-19970930
+does work with 5.004 (stricly speaking), but it has a buggy testsuite
+that will fail (correctly) on 5.004.
 
---- most recent changes:
-Sep 30, 96 dmr
-  DProf.xs
-  - added Ilya's patches to fix "&bar as &bar(@_)" bug.  This also fixes
-    the coredumps people have seen when using this with 5.003+.
-  DProf.pm
-  - updated manpage
-  t/bug.t
-  - moved to test5
-  Makefile.PL
-  - remove special case for bug.t
+If you're using 5.003, you need to go back to the previous version on
+CPAN (DProf-19960930).  DProf-19970606 and above will only work with
+perl 5.004 and later.

@@ -1,5 +1,16 @@
 use ExtUtils::MakeMaker;
 require 5.003;
+die qq{
+
+Your perl is too old for this version of DProf. The last version of
+DProf that works for perls older than 5.004 is DProf-19960930 and
+should be available from Dean Roehrich\'s directory on CPAN:
+
+    CPAN/authors/id/DMR/
+
+Please either upgrade your perl or get that older DProf from CPAN.
+
+} if $] < 5.004;
 $Verbose = 1;
 WriteMakefile(
 	'NAME'		=> 'Devel::DProf',
