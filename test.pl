@@ -11,6 +11,12 @@ getopts('vI:p:');
 # -I   Add to @INC
 # -p   Name of perl binary
 
+unless (-r 'dprofpp' and -M 'dprofpp' <= -M 'dprofpp.PL') {
+  print STDERR "dprofpp out of date, extracting...\n";
+  system 'perl', 'dprofpp.PL' and die 'perl dprofpp.PL: exit code $?, $!';
+}
+die "Need dprofpp, could not make it" unless -r 'dprofpp';
+
 chdir( 't' ) if -d 't';
 @tests = @ARGV ? @ARGV : sort <*.t *.v>;  # glob-sort, for OS/2
 

@@ -18,4 +18,4 @@ t/test4.v
 t/test5.t			&bar as &bar(@_) test
 t/test5.v			
 test.pl				test suite driver
-T/test1.pl			alternate test
+t/test1.pl			alternate test

@@ -278,7 +278,7 @@ opcode ptype;
 	    static U32 lastid;
 	    CV *cv;
 
-	    cv = (CV*)SvIV(Sub);
+	    cv = (CV*)SvIVX(Sub);
 	    svp = hv_fetch(cv_hash, (char*)&cv, sizeof(CV*), TRUE);
 	    if (!SvOK(*svp)) {
 		GV *gv = CvGV(cv);

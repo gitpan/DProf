@@ -89,14 +89,22 @@ a replacement for times() is used.  Defaults to the value of C<HZ> macro.
 
 Builtin functions cannot be measured by Devel::DProf.
 
-If the Perl is new enough (so PERLDBf_NONAME is defined), profiler may not
-survive assignments of strings to $DB::sub.  Such assignments were useful 
-with older versions of Perl near `goto &subr'.  They are not needed any more.
+With a newer Perl DProf relies on the fact that the numeric slot of
+$DB::sub contains an address of a subroutine.  Excessive manipulation
+of this variable may overwrite this slot, as in
 
-One such assignment is in Tk::Widget::AUTOLOAD as of 402.003.
+  $DB::sub = 'current_sub';
+  ...
+  $addr = $DB::sub + 0;
+
+will set this numeric slot to numeric value of the string
+C<current_sub>, i.e., to C<0>.  This will cause a segfault on the exit
+from this subroutine.  Note that the first assignment above does not
+change the numeric slot (it will I<mark> it as invalid, but will not
+write over it).
 
 Mail bug reports and feature requests to the perl5-porters mailing list at
-F<E<lt>perl5-porters@africa.nicoh.comE<gt>>.
+F<E<lt>perl5-porters@perl.orgE<gt>>.
 
 =head1 SEE ALSO
 
@@ -128,7 +136,7 @@ sub DB {
 
 require DynaLoader;
 @Devel::DProf::ISA = 'DynaLoader';
-$Devel::DProf::VERSION = '19971210'; # this version not authorized by
+$Devel::DProf::VERSION = '19971213'; # this version not authorized by
 				     # Dean Roehrich. See "Changes" file.
 
 bootstrap Devel::DProf $Devel::DProf::VERSION;

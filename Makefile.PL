@@ -20,6 +20,7 @@ WriteMakefile(
 	'EXE_FILES'	=> ['dprofpp'],
 	'PL_FILES'	=> {'dprofpp.PL' => 'dprofpp'},
 	'XSPROTOARG'	=> '-noprototypes',
+	'DEFINE'	=> '-DPERLDBf_NONAME=0x40 -DPERLDBf_GOTO=0x80 -DG_NODEBUG=32',
 
 	'dist' => { COMPRESS => 'gzip', SUFFIX => 'gz' },
 );
