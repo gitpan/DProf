@@ -1,6 +1,13 @@
+#define PERL_POLLUTE
+
 #include "EXTERN.h"
 #include "perl.h"
 #include "XSUB.h"
+
+/* For older Perls */
+#ifndef dTHR
+#  define dTHR int dummy_thr
+#endif	/* dTHR */ 
 
 /*#define DBG_SUB 1     /* */
 /*#define DBG_TIMER 1   /* */
@@ -410,6 +417,7 @@ static U32 default_perldb;
 static void
 test_time(clock_t *r, clock_t *u, clock_t *s)
 {
+    dTHR;
     CV *cv = perl_get_cv("Devel::DProf::NONESUCH_noxs", FALSE);
     int i, j, k = 0;
     HV *oldstash = curstash;

@@ -1,3 +1,9 @@
+1999 Jan 8
+
+ Ilya Zakharevich:
+  Newer perls: Add PERL_POLLUTE and dTHR.
+
+1998 Nov 10 
 This version of DProf should work with older Perls too, but to get
 full benefits some patches to 5.004_55 are needed.  Patches take effect 
 after new version of Perl is installed, and DProf recompiled.

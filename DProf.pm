@@ -184,7 +184,7 @@ sub DB {
 
 require DynaLoader;
 @Devel::DProf::ISA = 'DynaLoader';
-$Devel::DProf::VERSION = '19981010'; # this version not authorized by
+$Devel::DProf::VERSION = '19990108'; # this version not authorized by
 				     # Dean Roehrich. See "Changes" file.
 
 bootstrap Devel::DProf $Devel::DProf::VERSION;
