@@ -23,10 +23,11 @@ F<test.pl> the following command should be used:
 
 	perl5 -d:DProf test.pl
 
-When the script terminates the profiler will dump the profile information to
-a file called F<tmon.out>.  A tool like I<dprofpp> can be used to interpret
-the information which is in that profile.  The following command will print
-the top 15 subroutines which used the most time:
+When the script terminates (or when the output buffer is filled) the
+profiler will dump the profile information to a file called
+F<tmon.out>.  A tool like I<dprofpp> can be used to interpret the
+information which is in that profile.  The following command will
+print the top 15 subroutines which used the most time:
 
 	dprofpp
 
@@ -39,7 +40,7 @@ Consult L<dprofpp> for other options.
 
 =head1 PROFILE FORMAT
 
-The profile is a text file which looks like this:
+The old profile is a text file which looks like this:
 
 	#fOrTyTwO
 	$hz=100;
@@ -71,6 +72,53 @@ The columns in B<PART2> are:
 	app's system time at sub entry/exit mark, in ticks
 	app's realtime at sub entry/exit mark, in ticks
 	fully-qualified sub name, when possible
+
+With newer perls another format is used, which may look like this:
+
+        #fOrTyTwO
+        $hz=10000;
+        $XS_VERSION='DProf 19971213';
+        # All values are given in HZ
+        $over_utime=5917; $over_stime=0; $over_rtime=5917;
+        $over_tests=10000;
+        $rrun_utime=1284; $rrun_stime=0; $rrun_rtime=1284;
+        $total_marks=6;
+
+        PART2
+        @ 406 0 406
+        & 2 main bar
+        + 2
+        @ 456 0 456
+        - 2
+        @ 1 0 1
+        & 3 main baz
+        + 3
+        @ 141 0 141
+        + 2
+        @ 141 0 141
+        - 2
+        @ 1 0 1
+        & 4 main foo
+        + 4
+        @ 142 0 142
+        + & Devel::DProf::write
+        @ 5 0 5
+        - & Devel::DProf::write
+
+(with high value of $ENV{PERL_DPROF_TICKS}).  
+
+New C<$over_*> values show the measured overhead of making $over_tests
+calls to the profiler These values are used by the profiler to
+subtract the overhead from the runtimes.
+
+The lines starting with C<@> mark time passed from the previous C<@>
+line.  The lines starting with C<&> introduce new subroutine I<id> and
+show the package and the subroutine name of this id.  Lines starting
+with C<+>, C<-> and C<*> mark entering and exit of subroutines by
+I<id>s, and C<goto &subr>.
+
+The I<old-style> C<+>- and C<->-lines are used to mark the overhead
+related to writing to profiler-output file.
 
 =head1 AUTOLOAD
 
@@ -136,7 +184,7 @@ sub DB {
 
 require DynaLoader;
 @Devel::DProf::ISA = 'DynaLoader';
-$Devel::DProf::VERSION = '19971213'; # this version not authorized by
+$Devel::DProf::VERSION = '19981010'; # this version not authorized by
 				     # Dean Roehrich. See "Changes" file.
 
 bootstrap Devel::DProf $Devel::DProf::VERSION;

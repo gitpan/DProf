@@ -236,18 +236,14 @@ don't count on that in this version.
 
 =head1 BUGS
 
-Applications which call C<die> from within an eval for exception handling
-(catch/throw) or for setjmp/longjmp may not generate a readable profile.
-See the B<-F> option.
-
-Applications which call C<exit> from within a subroutine will leave an
-incomplete profile.  See the B<-F> option.
+Applications which call _exit() or exec() from within a subroutine
+will leave an incomplete profile.  See the B<-F> option.
 
 Any bugs in Devel::DProf, or any profiler generating the profile data, could
 be visible here.  See L<Devel::DProf/BUGS>.
 
 Mail bug reports and feature requests to the perl5-porters mailing list at
-F<E<lt>perl5-porters@africa.nicoh.comE<gt>>.  Bug reports should include the
+F<E<lt>perl5-porters@perl.orgE<gt>>.  Bug reports should include the
 output of the B<-V> option.
 
 =head1 FILES
@@ -573,6 +569,12 @@ sub parsestack {
 		($dir, $usert, $syst, $realt, $name) = split;
 
 		my $ot = $t;
+		if ( $dir eq '/' ) {
+		  $syst = $stack[-1][0];
+		  $usert = '&';
+		  $dir = '-';
+		  #warn("Inserted exit for $stack[-1][0].\n")
+		}
 		if (defined $realt) { # '+ times nam' '- times nam' or '@ incr'
 		  if   ( $opt_u )	{	$t = $usert		}
 		  elsif( $opt_s )	{	$t = $syst		}

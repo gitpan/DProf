@@ -5,6 +5,18 @@ after new version of Perl is installed, and DProf recompiled.
 Without these patches the overhead of DProf is too big, thus the statistic
 may be very skewed.
 
+Oct 98:
+ Ilya Zakharevich:
+  DProf.xs
+    - correct defstash to PL_defstash
+    - nonlocal exits work
+  dprofpp
+    - nonlocal exits work
+  DProf.pm
+    - documentation updated
+  t/test6.*
+    - added
+
 Nov-Dec 97:
  Jason E. Holt and Ilya Zakharevich:
   DProf.xs
@@ -23,6 +35,7 @@ Nov-Dec 97:
     - optional higher-resolution (currently OS/2 only, cannot grok VMS code);
     - outputs suggested profiler overhead;
     - handles 'goto' too;
+    - handles PERL_DPROF_TICKS (on OS/2, VMS may be easily modified too)
 
 Jun 14, 97 andreas koenig adds the compatibility notes to the README
 and lets the Makefile.PL die on $] < 5.004.

@@ -17,5 +17,7 @@ t/test4.t			fork test
 t/test4.v
 t/test5.t			&bar as &bar(@_) test
 t/test5.v			
+t/test6.t			Nonlocal exit test
+t/test6.v			
 test.pl				test suite driver
 t/test1.pl			alternate test

@@ -141,6 +141,8 @@ prof_dump(opcode ptype, char *name)
 	fprintf(fp,"- & %s\n", name );
     } else if(ptype == OP_ENTERSUB) {
 	fprintf(fp,"+ & %s\n", name );
+    } else if(ptype == OP_DIE) {
+	fprintf(fp,"/ & %s\n", name );
     } else {
 	fprintf(fp,"Profiler unknown prof code %d\n", ptype);
     }
@@ -156,6 +158,8 @@ prof_dumpa(opcode ptype, U32 id)
 	fprintf(fp,"+ %lx\n", id );
     } else if(ptype == OP_GOTO) {
 	fprintf(fp,"* %lx\n", id );
+    } else if(ptype == OP_DIE) {
+	fprintf(fp,"/ %lx\n", id );
     } else {
 	fprintf(fp,"Profiler unknown prof code %d\n", ptype);
     }
@@ -398,6 +402,10 @@ opcode ptype;
 
 static U32 default_perldb;
 
+#ifdef PL_NEEDED
+#  define defstash PL_defstash
+#endif
+
 /* Counts overhead of prof_mark and extra XS call. */
 static void
 test_time(clock_t *r, clock_t *u, clock_t *s)
@@ -503,6 +511,27 @@ prof_record()
 
 #define NONESUCH()
 
+static U32 depth = 0;
+
+static void
+check_depth(void *foo)
+{
+    U32 need_depth = (U32)foo;
+    if (need_depth != depth) {
+	if (need_depth > depth) {
+	    warn("garbled call depth when profiling");
+	} else {
+	    I32 marks = depth - need_depth;
+
+/* 	    warn("Check_depth: got %d, expected %d\n", depth, need_depth); */
+	    while (marks--) {
+		prof_mark( OP_DIE );
+	    }
+	    depth = need_depth;
+	}
+    }
+}
+
 #define for_real
 #ifdef for_real
 
@@ -520,6 +549,9 @@ XS(XS_DB_sub)
         sv_setiv( DBsingle, 0 ); /* disable DB single-stepping */
 #endif 
 
+	SAVEDESTRUCTOR(check_depth, (void*)depth);
+	depth++;
+
         prof_mark( OP_ENTERSUB );
         PUSHMARK( ORIGMARK );
 
@@ -536,6 +568,8 @@ XS(XS_DB_sub)
 #endif 
 
         prof_mark( OP_LEAVESUB );
+	depth--;
+
         SPAGAIN;
         PUTBACK;
         return;

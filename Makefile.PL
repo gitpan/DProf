@@ -11,6 +11,13 @@ should be available from Dean Roehrich\'s directory on CPAN:
 Please either upgrade your perl or get that older DProf from CPAN.
 
 } if $] < 5.004;
+
+if ($] < 5.005) {
+  $defines = '';
+} else {
+  $defines = '-DPERLDBf_NONAME=0x40 -DPERLDBf_GOTO=0x80 -DG_NODEBUG=32 -DPL_NEEDED';
+}
+
 $Verbose = 1;
 WriteMakefile(
 	'NAME'		=> 'Devel::DProf',
@@ -20,8 +27,7 @@ WriteMakefile(
 	'EXE_FILES'	=> ['dprofpp'],
 	'PL_FILES'	=> {'dprofpp.PL' => 'dprofpp'},
 	'XSPROTOARG'	=> '-noprototypes',
-	'DEFINE'	=> '-DPERLDBf_NONAME=0x40 -DPERLDBf_GOTO=0x80 -DG_NODEBUG=32',
-
+	'DEFINE'	=> $defines,
 	'dist' => { COMPRESS => 'gzip', SUFFIX => 'gz' },
 );
 
