@@ -1,6 +1,6 @@
 # perl
 
-require 5.002;
+require 5.003;
 
 use Benchmark qw( timediff timestr );
 use Getopt::Std 'getopts';

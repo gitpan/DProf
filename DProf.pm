@@ -1,4 +1,4 @@
-require 5.002;
+require 5.003;
 
 =head1 NAME
 
@@ -82,9 +82,6 @@ L<perlsub/"Autoloading">.
 
 XSUBs, builtin functions, and destructors cannot be measured by Devel::DProf.
 
-Sub calls using C<&bar> as shorthand for C<&bar(@_)> will be broken by
-Devel::DProf.
-
 Mail bug reports and feature requests to the perl5-porters mailing list at
 F<E<lt>perl5-porters@africa.nicoh.comE<gt>>.
 
@@ -118,7 +115,7 @@ sub DB {
 
 require DynaLoader;
 @Devel::DProf::ISA = 'DynaLoader';
-$Devel::DProf::VERSION = '19960626';
+$Devel::DProf::VERSION = '19960930';
 
 bootstrap Devel::DProf $Devel::DProf::VERSION;
 

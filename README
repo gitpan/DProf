@@ -6,17 +6,17 @@ The dprofpp tool is included in this package.
 
 For more information consult the pod in DProf.pm.
 
-(Expect test t/bug to fail.)
-
 Dean Roehrich
 
 
 --- most recent changes:
-Jun 26, 96 dmr
-  dprofpp.PL
-  - smarter r.e. to find VERSION in Makefile (for MM5.27).
+Sep 30, 96 dmr
+  DProf.xs
+  - added Ilya's patches to fix "&bar as &bar(@_)" bug.  This also fixes
+    the coredumps people have seen when using this with 5.003+.
   DProf.pm
   - updated manpage
-  DProf.xs
-  - keep pid of profiled process, if process forks then only the
-    parent is profiled.  Added test4 for this.
+  t/bug.t
+  - moved to test5
+  Makefile.PL
+  - remove special case for bug.t

@@ -1,3 +1,14 @@
+Sep 30, 96 dmr
+  DProf.xs
+  - added Ilya's patches to fix "&bar as &bar(@_)" bug.  This also fixes
+    the coredumps people have seen when using this with 5.003+.
+  DProf.pm
+  - updated manpage
+  t/bug.t
+  - moved to test5
+  Makefile.PL
+  - remove special case for bug.t
+
 Jun 26, 96 dmr
   dprofpp.PL
   - smarter r.e. to find VERSION in Makefile (for MM5.27).

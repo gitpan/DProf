@@ -45,7 +45,7 @@ $Config{'startperl'}
     eval 'exec perl -S \$0 "\$@"'
 	if 0;
 
-require 5.002;
+require 5.003;
 
 my \$VERSION = $VERSION;
 

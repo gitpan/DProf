@@ -1,3 +1,7 @@
+END { print "main:: the end\n" }
+sub FOO::END { print "foo:: the end\n" }
+
+
 sub foo {
 	my $x;
 	my $y;
@@ -25,3 +29,4 @@ sub baz {
 bar();
 baz();
 foo();
+

@@ -56,6 +56,8 @@
 #  endif
 #endif
 
+XS(XS_Devel__DProf_END);	/* used by prof_mark() */
+
 static SV * Sub;	/* pointer to $DB::sub */
 static FILE *fp;	/* pointer to tmon.out file */
 
@@ -113,11 +115,20 @@ opcode ptype;
 		 */
 		sv = (SV*)SvRV(Sub);
 		if( sv && SvTYPE(sv) == SVt_PVCV ){
-			hvname = HvNAME(CvSTASH(sv));
+			if( CvSTASH(sv) ){
+				hvname = HvNAME(CvSTASH(sv));
+			}
+			else if( CvXSUB(sv) == &XS_Devel__DProf_END ){
+				/*warn( "prof_mark() found dprof::end");*/
+				return; /* don't profile Devel::DProf::END */
+			}
+			else{
+			    croak( "DProf prof_mark() lost on CODE ref %s\n", pv );
+			}
 			len += strlen( hvname ) + 2;  /* +2 for ::'s */
 
 		}
-		else {
+		else{
 			croak( "DProf prof_mark() lost on supposed CODE ref %s.\n", pv );
 		}
 		name = (char *)safemalloc( len * sizeof(char) + 1 );
@@ -208,6 +219,8 @@ XS(XS_DB_sub)
 {
 	dXSARGS;
 	dORIGMARK;
+	HV *oldstash = curstash;
+
 	SP -= items;
 
 	DBG_SUB_NOTIFY( "XS DBsub(%s)\n", SvPV(Sub, na) );
@@ -217,7 +230,9 @@ XS(XS_DB_sub)
 	prof_mark( OP_ENTERSUB );
 	PUSHMARK( ORIGMARK );
 
+	curstash = debstash;	/* To disable debugging of perl_call_sv */
 	perl_call_sv( Sub, GIMME );
+	curstash = oldstash;
 
 	prof_mark( OP_LEAVESUB );
 	SPAGAIN;
@@ -236,6 +251,7 @@ XS(XS_DB_sub)
 		PPCODE:
 
 		dORIGMARK;
+		HV *oldstash = curstash;
 		/* SP -= items;  added by xsubpp */
 		DBG_SUB_NOTIFY( "XS DBsub(%s)\n", SvPV(Sub, na) );
 
@@ -244,7 +260,9 @@ XS(XS_DB_sub)
 		prof_mark( OP_ENTERSUB );
 		PUSHMARK( ORIGMARK );
 
+		curstash = debstash;	/* To disable debugging of perl_call_sv */
 		perl_call_sv( Sub, GIMME );
+		curstash = oldstash;
 
 		prof_mark( OP_LEAVESUB );
 		SPAGAIN;
