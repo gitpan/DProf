@@ -78,9 +78,22 @@ When Devel::DProf finds a call to an C<&AUTOLOAD> subroutine it looks at the
 C<$AUTOLOAD> variable to find the real name of the sub being called.  See
 L<perlsub/"Autoloading">.
 
+=head1 ENVIRONMENT
+
+C<PERL_DPROF_BUFFER> sets size of output buffer in words.  Defaults to 2**14.
+
+C<PERL_DPROF_TICKS> sets number of ticks per second on some systems where
+a replacement for times() is used.  Defaults to the value of C<HZ> macro.
+
 =head1 BUGS
 
-XSUBs, builtin functions, and destructors cannot be measured by Devel::DProf.
+Builtin functions cannot be measured by Devel::DProf.
+
+If the Perl is new enough (so PERLDBf_NONAME is defined), profiler may not
+survive assignments of strings to $DB::sub.  Such assignments were useful 
+with older versions of Perl near `goto &subr'.  They are not needed any more.
+
+One such assignment is in Tk::Widget::AUTOLOAD as of 402.003.
 
 Mail bug reports and feature requests to the perl5-porters mailing list at
 F<E<lt>perl5-porters@africa.nicoh.comE<gt>>.
@@ -90,6 +103,13 @@ F<E<lt>perl5-porters@africa.nicoh.comE<gt>>.
 L<perl>, L<dprofpp>, times(2)
 
 =cut
+
+# This sub is needed for calibration.
+package Devel::DProf;
+
+sub NONESUCH_noxs {
+	return $Devel::DProf::VERSION;
+}
 
 package DB;
 
@@ -106,10 +126,9 @@ sub DB {
 #	print "nonXS DBDB\n";
 }
 
-
 require DynaLoader;
 @Devel::DProf::ISA = 'DynaLoader';
-$Devel::DProf::VERSION = '19970614'; # this version not authorized by
+$Devel::DProf::VERSION = '19971210'; # this version not authorized by
 				     # Dean Roehrich. See "Changes" file.
 
 bootstrap Devel::DProf $Devel::DProf::VERSION;

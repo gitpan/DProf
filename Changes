@@ -1,3 +1,29 @@
+This version of DProf should work with older Perls too, but to get
+full benefits some patches to 5.004_55 are needed.  Patches take effect 
+after new version of Perl is installed, and DProf recompiled.
+
+Without these patches the overhead of DProf is too big, thus the statistic
+may be very skewed.
+
+Nov-Dec 97:
+ Jason E. Holt and Ilya Zakharevich:
+  DProf.xs
+    - will not wait until completion to write the output, size of buffer
+      regulated by PERL_DPROF_BUFFER, default 2**14 words;
+
+ Ilya Zakharevich:
+  dprofpp
+    - smarter in fixing garbled profiles;
+    - subtracts DProf output overhead, and suggested profiler overhead;
+    - new options -A, -R, -g subroutine, -S;
+    - handles 'goto' too;
+  DProf.xs
+    - 7x denser output (time separated from name, ids for subs);
+    - outputs report-write overhead;
+    - optional higher-resolution (currently OS/2 only, cannot grok VMS code);
+    - outputs suggested profiler overhead;
+    - handles 'goto' too;
+
 Jun 14, 97 andreas koenig adds the compatibility notes to the README
 and lets the Makefile.PL die on $] < 5.004.
 
