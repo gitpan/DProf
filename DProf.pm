@@ -43,7 +43,7 @@ The profile is a text file which looks like this:
 
 	#fOrTyTwO
 	$hz=100;
-	$XS_VERSION='DProf 19960205';
+	$XS_VERSION='DProf 19970606';
 	# All values are given in HZ
 	$rrun_utime=2; $rrun_stime=0; $rrun_rtime=7
 	PART2
@@ -93,19 +93,13 @@ L<perl>, L<dprofpp>, times(2)
 
 package DB;
 
-# This sub is replaced by an XS version after the profiler is bootstrapped.
-sub sub {
-#	print "nonXS DBsub($sub)\n";
-	$single = 0; # disable DB single-stepping
-	if( wantarray ){
-		@a = &$sub;
-		@a;
-	}
-	else{
-		$a = &$sub;
-		$a;
-	}
-}
+#
+# As of perl5.003_20, &DB::sub stub is not needed (some versions
+# even had problems if stub was redefined with XS version).
+#
+
+# disable DB single-stepping
+BEGIN { $single = 0; }
 
 # This sub is needed during startup.
 sub DB { 
@@ -115,7 +109,10 @@ sub DB {
 
 require DynaLoader;
 @Devel::DProf::ISA = 'DynaLoader';
-$Devel::DProf::VERSION = '19960930';
+$Devel::DProf::VERSION = '19970606'; # this version not authorized by
+					# Dean Roehrich. Patch from
+					# Gurusamy Sarathy applied while
+					# Dean was not available for comments.
 
 bootstrap Devel::DProf $Devel::DProf::VERSION;
 

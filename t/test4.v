@@ -3,8 +3,8 @@
 use V;
 
 dprofpp( '-T' );
-$expected = qq{
-main::bar
+$expected =
+qq{main::bar
 main::bar
 main::baz
    main::bar
@@ -21,8 +21,8 @@ dprofpp('-TF');
 report 2, sub { $expected eq $results };
 
 dprofpp( '-t' );
-$expected = qq{
-main::bar (2x)
+$expected =
+qq{main::bar (2x)
 main::baz
    main::bar (3x)
    main::foo

@@ -1,3 +1,7 @@
+Jun 06, 97 andreas koenig applies a patch by gurusamy sarathy because
+Dean is not available for comments at that time. The patch is available
+from CPAN in the authors/id/GSAR directory for inspection.
+
 Sep 30, 96 dmr
   DProf.xs
   - added Ilya's patches to fix "&bar as &bar(@_)" bug.  This also fixes

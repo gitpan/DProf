@@ -3,8 +3,8 @@
 use V;
 
 dprofpp( '-T' );
-$e1 = $expected = qq{
-main::bar
+$e1 = $expected =
+qq{main::bar
 main::baz
    main::bar
    main::foo
@@ -16,8 +16,8 @@ Try rerunning dprofpp with -F.
 report 1, sub { $expected eq $results };
 
 dprofpp('-TF');
-$e2 = $expected = qq{
-main::bar
+$e2 = $expected =
+qq{main::bar
 main::baz
    main::bar
    main::foo
